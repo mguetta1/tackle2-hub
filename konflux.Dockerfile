@@ -23,6 +23,10 @@ RUN make vet && CGO_ENABLED=1 go build -tags json1,strictfipsruntime -o bin/hub 
 # Remove AKS label from Azure target inline
 RUN sed -i -e '/Azure\ Kubernetes\ Service/{N;d}' /workspace/hack/build/seed/resources/targets.yaml
 
+# Only do this downstream
+RUN find /workspace/hack/build/seed/resources -type f -exec sed -i '/konveyor.io\/target=azure-aks/d' {} +
+RUN find /workspace/hack/build/seed/resources -type f -exec sed -i '/konveyor.io\/target=azure-container-apps/d' {} +
+
 # Build tini
 # Tini only available in EPEL for now (01/26/2026)
 FROM registry.redhat.io/ubi10:latest as tini-builder
